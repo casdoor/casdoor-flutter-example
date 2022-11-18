@@ -30,7 +30,7 @@ Initialization requires 6 parameters, which are all str type:
 | callbackUrlScheme  | Yes | URL Scheme |
 
 ```
-  final CasdoorFlutterSdkConfig _config =  CasdoorFlutterSdkConfig(
+  final AuthConfig _config =  AuthConfig(
       clientId: "014ae4bd048734ca2dea",
       endpoint: "door.casdoor.com",
       organizationName: "casbin",
