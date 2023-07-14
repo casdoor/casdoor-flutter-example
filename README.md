@@ -1,7 +1,7 @@
 <h1 align="center" style="border-bottom: none;">📦⚡️Casdoor flutter example</h1>
 <h3 align="center">An example of casdoor-flutter-sdk</h3>
 
-## 	The example uses the following casdoor server:
+## 	The example uses the following Casdoor demo site server:
 
 The server: https://door.casdoor.com/
 
@@ -23,7 +23,7 @@ Initialization requires 6 parameters, which are all str type:
 |  Name (in order)   | Must  | Description |
 |  ----  | ----  |----  |
 | clientId  | Yes | Application.client_id |
-| endpoint  | Yes | Casdoor Server Url, such as `door.casdoor.com` |
+| serverUrl  | Yes | Casdoor Server Url, such as `https://door.casdoor.com` |
 | organizationName  | Yes | Organization name |
 | appName  | Yes | Application name |
 | redirectUri  | Yes | URI of Web redirection |
@@ -32,7 +32,7 @@ Initialization requires 6 parameters, which are all str type:
 ```
   final AuthConfig _config =  AuthConfig(
       clientId: "014ae4bd048734ca2dea",
-      endpoint: "door.casdoor.com",
+      serverUrl: "https://door.casdoor.com",
       organizationName: "casbin",
       appName: "app-casnode",
       redirectUri: "http://localhost:9000/callback",
