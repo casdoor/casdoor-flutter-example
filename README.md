@@ -35,7 +35,7 @@ Initialization requires 6 parameters, which are all str type:
       serverUrl: "https://door.casdoor.com",
       organizationName: "casbin",
       appName: "app-casnode",
-      redirectUri: "http://localhost:9000/callback",
+      redirectUri: "http://localhost:9000/callback.html",
       callbackUrlScheme: "casdoor"
   );
 ```

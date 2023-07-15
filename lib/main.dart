@@ -25,7 +25,7 @@ class _MyAppState extends State<MyApp> {
       serverUrl: "https://door.casdoor.com",
       organizationName: "casbin",
       appName: "app-casnode",
-      redirectUri: "http://localhost:9000/callback",
+      redirectUri: "http://localhost:9000/callback.html",
       callbackUrlScheme: "casdoor");
 
   @override
@@ -40,7 +40,7 @@ class _MyAppState extends State<MyApp> {
         await CasdoorFlutterSdkPlatform.instance.getPlatformVersion() ?? "";
     String callbackUri;
     if (platform == "web") {
-      callbackUri = "${_config.redirectUri}.html";
+      callbackUri = "${_config.redirectUri}";
     } else {
       callbackUri = "${_config.callbackUrlScheme}://callback";
     }
