@@ -60,15 +60,27 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
           appBar: AppBar(
-            title: const Text('Casdoor flutter SDK example'),
+            title: const Text('Casdoor Flutter Example'),
           ),
           body: Center(
-            child: Text('Running on: $_token\n'),
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: authenticate,
-            tooltip: 'Authenticate',
-            child: const Icon(Icons.people),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text('Current user: $_token\n'),
+                ElevatedButton(
+                  onPressed: authenticate,
+                  child: const Text('Login'),
+                  style: ButtonStyle(
+                    padding: MaterialStateProperty.all<EdgeInsets>(
+                      EdgeInsets.all(20),
+                    ),
+                    minimumSize: MaterialStateProperty.all<Size>(
+                      Size(200, 50),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           )),
     );
   }
