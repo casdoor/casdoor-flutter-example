@@ -19,13 +19,14 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _token = 'User is not logged in';
+  Map<String, dynamic> map = {};
 
   final AuthConfig _config = AuthConfig(
       clientId: "014ae4bd048734ca2dea",
       serverUrl: "https://door.casdoor.com",
       organizationName: "casbin",
       appName: "app-casnode",
-      redirectUri: "http://localhost:9000/callback.html",
+      redirectUri: "http://localhost:9000/callback",
       callbackUrlScheme: "casdoor");
 
   @override
@@ -33,25 +34,41 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
+  String callbackUri = "";
+
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> authenticate() async {
-    // Get platform information
+    // Get platform information callbackUri.substring(callbackUri.length - 5) != ".html"
     final platform =
         await CasdoorFlutterSdkPlatform.instance.getPlatformVersion() ?? "";
-    String callbackUri;
+
     if (platform == "web") {
-      callbackUri = "${_config.redirectUri}";
+      if(callbackUri == "") {
+        callbackUri = "${_config.redirectUri}.html";
+      } else {
+
+      }
     } else {
       callbackUri = "${_config.callbackUrlScheme}://callback";
     }
     _config.redirectUri = callbackUri;
+    print(_config.redirectUri);
     final Casdoor _casdoor = Casdoor(config: _config);
     final result = await _casdoor.show();
     // Get code
     final code = Uri.parse(result).queryParameters['code'] ?? "";
     final response = await _casdoor.requestOauthAccessToken(code);
+    _token = jsonDecode(response.body)["access_token"] as String;
+    map = _casdoor.decodedToken(_token);
+
     setState(() {
-      _token = jsonDecode(response.body)["access_token"] as String;
+      _token = 'User logged in';
+    });
+  }
+
+  Future<void> logout() async {
+    setState(() {
+      _token = 'User is not logged in';
     });
   }
 
@@ -67,9 +84,23 @@ class _MyAppState extends State<MyApp> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text('Current user: $_token\n'),
+                Visibility(
+                  visible: _token != 'User is not logged in',
+                  child:
+                  Column(
+                    children: [
+                      Image.network(
+                        _token == 'User is not logged in' ? "" : map['avatar'],
+                        width: 100,
+                        height: 100,
+                      ),
+                      Text('${_token == 'User is not logged in' ? "" : map['name']}'),
+                    ],
+                  ),
+                ),
                 ElevatedButton(
-                  onPressed: authenticate,
-                  child: const Text('Login'),
+                  onPressed: _token == 'User is not logged in' ? authenticate : logout,
+                  child: Text(_token == 'User is not logged in' ? 'Login' : 'Logout'),
                   style: ButtonStyle(
                     padding: MaterialStateProperty.all<EdgeInsets>(
                       EdgeInsets.all(20),
