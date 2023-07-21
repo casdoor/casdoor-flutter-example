@@ -40,6 +40,12 @@ Initialization requires 6 parameters, which are all str type:
   );
 ```
 
+## Run
+
+```
+flutter run -d chrome --web-port 9000
+```
+
 ## Note here that for Android and Web
 
 ### Android
