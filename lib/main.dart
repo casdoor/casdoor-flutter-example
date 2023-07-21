@@ -38,7 +38,7 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> authenticate() async {
-    // Get platform information callbackUri.substring(callbackUri.length - 5) != ".html"
+    // Get platform information
     final platform =
         await CasdoorFlutterSdkPlatform.instance.getPlatformVersion() ?? "";
 
