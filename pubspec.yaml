@@ -20,3 +20,13 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+casdoor_flutter_sdk:
+  app_id: wx049c70e6c2027b0b
+  debug_logging: true
+  ios:
+    universal_link: https://testdomain.com
+  # default false
+  #    scene_delegate: true
+  # payment is enabled by default
+#    no_pay: true

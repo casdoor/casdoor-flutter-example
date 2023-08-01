@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:casdoor_flutter_sdk/casdoor.dart';
 import 'package:casdoor_flutter_sdk/casdoor_flutter_sdk_config.dart';
 import 'package:casdoor_flutter_sdk/casdoor_flutter_sdk_platform_interface.dart';
+import 'package:casdoor_flutter_sdk/casdoor_flutter_sdk_oauth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -18,7 +19,7 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver{
   String _token = '';
 
   final AuthConfig _config = AuthConfig(
@@ -31,8 +32,22 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    WidgetsBinding.instance?.addObserver(this);
     super.initState();
     restoreToken();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance?.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      CasdoorOauth.registerWXApi(app_id: 'wx049c70e6c2027b0b', universal_link: 'https://testdomain.com');
+    }
   }
 
   Future<void> restoreToken() async {
