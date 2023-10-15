@@ -46,21 +46,26 @@ Initialization requires 6 parameters, which are all str type:
 flutter run -d chrome --web-port 9000
 ```
 
-## Note here that for Android and Web
+## Notes for different platforms
 
-### Android
-In order to capture the callback url, the following activity needs to be added to your AndroidManifest.xml. Be sure to relpace YOUR_CALLBACK_URL_SCHEME_HERE with your actual callback url scheme.
+## Android and iOS
+
+Please check the [documentation](https://inappwebview.dev/docs/intro) of the InAppWebView package for more details.
+
+## Android
+
+Increase the SDK version in `android/app/build.gradle` to 34:
+
 ```
- <activity android:name="com.example.casdoor_flutter_sdk.CallbackActivity"
-           android:exported="true">
-           <intent-filter android:label="casdoor_flutter_sdk">
-               <action android:name="android.intent.action.VIEW" />
-               <category android:name="android.intent.category.DEFAULT" />
-               <category android:name="android.intent.category.BROWSABLE" />
-               <data android:scheme="casdoor" />
-           </intent-filter>
-       </activity>
+...
+android {
+    compileSdkVersion 34
+...
 ```
+
+## Windows and Linux
+
+Please check the [documentation](https://pub.dev/packages/desktop_webview_window) of the desktop_webview_window package for more details.
 
 ### Web
 On the Web platform an endpoint needs to be created that captures the callback URL and sends it to the application using the JavaScript postMessage() method. In the ./web folder of the project, create an HTML file with the name e.g. callback.html with content:
