@@ -48,11 +48,11 @@ flutter run -d chrome --web-port 9000
 
 ## Notes for different platforms
 
-## Android and iOS
+### Android and iOS
 
 Please check the [documentation](https://inappwebview.dev/docs/intro) of the InAppWebView package for more details.
 
-## Android
+### Android
 
 Increase the SDK version in `android/app/build.gradle` to 34:
 
@@ -63,7 +63,7 @@ android {
 ...
 ```
 
-## Windows and Linux
+### Windows and Linux
 
 Please check the [documentation](https://pub.dev/packages/desktop_webview_window) of the desktop_webview_window package for more details.
 
