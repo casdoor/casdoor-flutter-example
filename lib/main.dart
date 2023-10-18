@@ -6,9 +6,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-Future main(List<String> args) async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  
   runApp(const MyApp());
 }
 
@@ -179,13 +179,11 @@ class _MyAppState extends State<MyApp> {
                           children: [
                             Checkbox(
                               value: _clearCache,
-                              onChanged: (_selectedAuthType == 'inapp')
-                                  ? (bool? newValue) {
-                                      setState(() {
-                                        _clearCache = newValue!;
-                                      });
-                                    }
-                                  : null,
+                              onChanged: (bool? newValue) {
+                                setState(() {
+                                  _clearCache = newValue!;
+                                });
+                              },
                             ),
                             const Padding(
                               padding: EdgeInsets.only(left: 5),
