@@ -10,13 +10,13 @@ The server: https://door.casdoor.com/
 - download the code
 
 ```bash
- git clone git@github.com:casdoor/casdoor-flutter-example.git
+git clone git@github.com:casdoor/casdoor-flutter-example.git
 ```
 
 - install dependencies
 
 ```shell
- flutter pub get
+flutter pub get
 ```
 ## Configure
 Initialization requires 6 parameters, which are all str type:
@@ -46,20 +46,28 @@ Initialization requires 6 parameters, which are all str type:
 flutter run -d chrome --web-port 9000
 ```
 
-## Note here that for Android and Web
+## Notes for different platforms
 
-### Android
-In order to capture the callback url, the following activity needs to be added to your AndroidManifest.xml. Be sure to relpace YOUR_CALLBACK_URL_SCHEME_HERE with your actual callback url scheme.
+### Windows 10
+
+Download the WebView2 runtime from [here](https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section) and install it.
+
+The WebView2 runtime is included in Windows 11 by default.
+
+## Linux and macOS
+
+Add the package `desktop_webview_window: ^0.2.3` inside *dependencies* to the *pubspec.yaml* file.
+
+Modify the *main* function to look like the following:
+
 ```
- <activity android:name="com.example.casdoor_flutter_sdk.CallbackActivity"
-           android:exported="true">
-           <intent-filter android:label="casdoor_flutter_sdk">
-               <action android:name="android.intent.action.VIEW" />
-               <category android:name="android.intent.category.DEFAULT" />
-               <category android:name="android.intent.category.BROWSABLE" />
-               <data android:scheme="casdoor" />
-           </intent-filter>
-       </activity>
+void main(List<String> args) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  if (runWebViewTitleBarWidget(args)) {
+    return;
+  }
+  runApp(const MyApp());
+}
 ```
 
 ### Web
