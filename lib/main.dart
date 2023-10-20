@@ -193,10 +193,8 @@ class _MyAppState extends State<MyApp> {
                         )
                       : Container(),
                   ElevatedButton(
-                    onPressed: () => (_btnActive == true)
-                        ? (_token == '')
-                            ? login(context)
-                            : logout()
+                    onPressed: (_btnActive == true)
+                        ? () => (_token == '') ? login(context) : logout()
                         : null,
                     style: ButtonStyle(
                       padding: MaterialStateProperty.all<EdgeInsets>(
