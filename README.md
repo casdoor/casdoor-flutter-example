@@ -10,13 +10,13 @@ The server: https://door.casdoor.com/
 - download the code
 
 ```bash
- git clone git@github.com:casdoor/casdoor-flutter-example.git
+git clone git@github.com:casdoor/casdoor-flutter-example.git
 ```
 
 - install dependencies
 
 ```shell
- flutter pub get
+flutter pub get
 ```
 ## Configure
 Initialization requires 6 parameters, which are all str type:
@@ -48,24 +48,27 @@ flutter run -d chrome --web-port 9000
 
 ## Notes for different platforms
 
-### Android and iOS
+### Windows 10
 
-Please check the [documentation](https://inappwebview.dev/docs/intro) of the InAppWebView package for more details.
+Download the WebView2 runtime from [here](https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section) and install it.
 
-### Android
+The WebView2 runtime is included in Windows 11 by default.
 
-Increase the SDK version in `android/app/build.gradle` to 34:
+## Linux and macOS
+
+Add the package `desktop_webview_window: ^0.2.3` inside *dependencies* to the *pubspec.yaml* file.
+
+Modify the *main* function to look like the following:
 
 ```
-...
-android {
-    compileSdkVersion 34
-...
+void main(List<String> args) async {
+  WidgetsFlutterBinding.ensureInitialized();
+  if (runWebViewTitleBarWidget(args)) {
+    return;
+  }
+  runApp(const MyApp());
+}
 ```
-
-### Windows and Linux
-
-Please check the [documentation](https://pub.dev/packages/desktop_webview_window) of the desktop_webview_window package for more details.
 
 ### Web
 On the Web platform an endpoint needs to be created that captures the callback URL and sends it to the application using the JavaScript postMessage() method. In the ./web folder of the project, create an HTML file with the name e.g. callback.html with content:
