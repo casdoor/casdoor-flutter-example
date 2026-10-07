@@ -23,9 +23,8 @@ final AuthConfig casdoorConfig = AuthConfig(
   appName: 'app-casnode',
   // must be in the Redirect URLs of the application.
   // Native platforms: the custom scheme. Web: web/callback.html of this app.
-  redirectUri: kIsWeb
-      ? 'http://localhost:9000/callback.html'
-      : 'casdoor://callback',
+  redirectUri:
+      kIsWeb ? 'http://localhost:9000/callback.html' : 'casdoor://callback',
   callbackUrlScheme: 'casdoor',
 );
 
@@ -155,9 +154,8 @@ class _MyAppState extends State<MyApp> {
                 ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: _busy
-                    ? null
-                    : (_accessToken.isEmpty ? _login : _logout),
+                onPressed:
+                    _busy ? null : (_accessToken.isEmpty ? _login : _logout),
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(200, 50),
                 ),
