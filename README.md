@@ -1,100 +1,79 @@
-<h1 align="center" style="border-bottom: none;">📦⚡️Casdoor flutter example</h1>
-<h3 align="center">An example of casdoor-flutter-sdk</h3>
+# Casdoor Flutter Example
 
-## 	The example uses the following Casdoor demo site server:
+[![Build](https://github.com/casdoor/casdoor-flutter-example/actions/workflows/build.yml/badge.svg)](https://github.com/casdoor/casdoor-flutter-example/actions/workflows/build.yml)
+[![License](https://img.shields.io/github/license/casdoor/casdoor-flutter-example)](https://github.com/casdoor/casdoor-flutter-example/blob/master/LICENSE)
+[![Discord](https://img.shields.io/discord/1022748306096537660?logo=discord&label=discord&color=5865F2)](https://discord.gg/5rPsrAzK7S)
 
-The server: https://door.casdoor.com/
+An example [Flutter](https://flutter.dev/) app (Android, iOS, macOS, Linux, Windows and the Web) that signs users in with [Casdoor](https://casdoor.ai/) using [casdoor-flutter-sdk](https://github.com/casdoor/casdoor-flutter-sdk).
 
-## Quick Start
+| Android | iOS | Web |
+|---------|-----|-----|
+| ![Android](screen-andriod.gif) | ![iOS](screen-ios.gif) | ![Web](screen-web.gif) |
 
-- download the code
+## How it works
 
-```bash
-git clone git@github.com:casdoor/casdoor-flutter-example.git
+All of it is in [lib/main.dart](lib/main.dart):
+
+1. **Login** calls `casdoor.show()`. The SDK creates a PKCE code verifier, a nonce and a random state, and opens the Casdoor sign-in page: in the system browser on Android, iOS and macOS, in a web view window on Linux and Windows, in a popup on the Web.
+2. After signing in, Casdoor redirects to the redirect URI (`casdoor://callback`, or `callback.html` on the Web) and the SDK returns that URL. The app checks the state with `casdoor.isState()`.
+3. `casdoor.requestOauthAccessToken(code)` exchanges the code for the tokens with the code verifier, so no client secret is stored in the app.
+4. The app shows the user from the access token (`casdoor.decodedToken()`) and keeps the tokens with shared_preferences. **Logout** ends the Casdoor session (`casdoor.tokenLogout()`).
+
+## Prerequisites
+
+- [Flutter](https://docs.flutter.dev/get-started/install) 3.24+
+- A Casdoor server. The example is preconfigured for the public demo server https://door.casdoor.com, so it runs as is. To use your own, see [Casdoor installation](https://casdoor.ai/docs/basic/server-installation).
+
+## Configuration
+
+Skip this section to try the example with the public demo server.
+
+In your Casdoor, create (or reuse) an organization and an application, and add `casdoor://callback` and `http://localhost:9000/callback.html` to the application's **Redirect URLs**. Then fill in `casdoorConfig` in [lib/main.dart](lib/main.dart):
+
+```dart
+final AuthConfig casdoorConfig = AuthConfig(
+  clientId: '014ae4bd048734ca2dea', // client ID of the application
+  serverUrl: 'https://door.casdoor.com', // Casdoor server URL
+  organizationName: 'casbin', // organization of the application
+  appName: 'app-casnode', // name of the application
+  redirectUri:
+      kIsWeb ? 'http://localhost:9000/callback.html' : 'casdoor://callback',
+  callbackUrlScheme: 'casdoor',
+);
 ```
 
-- install dependencies
-
-```shell
-flutter pub get
-```
-## Configure
-Initialization requires 6 parameters, which are all str type:
-|  Name (in order)   | Must  | Description |
-|  ----  | ----  |----  |
-| clientId  | Yes | Application.client_id |
-| serverUrl  | Yes | Casdoor Server Url, such as `https://door.casdoor.com` |
-| organizationName  | Yes | Organization name |
-| appName  | Yes | Application name |
-| redirectUri  | Yes | URI of Web redirection |
-| callbackUrlScheme  | Yes | URL Scheme |
-
-```
-  final AuthConfig _config =  AuthConfig(
-      clientId: "014ae4bd048734ca2dea",
-      serverUrl: "https://door.casdoor.com",
-      organizationName: "casbin",
-      appName: "app-casnode",
-      redirectUri: "http://localhost:9000/callback.html",
-      callbackUrlScheme: "casdoor"
-  );
-```
+If you change the scheme `casdoor`, change it in [android/app/src/main/AndroidManifest.xml](android/app/src/main/AndroidManifest.xml) too.
 
 ## Run
 
-```
-flutter run -d chrome --web-port 9000
-```
-
-## Notes for different platforms
-
-### Windows 10
-
-Download the WebView2 runtime from [here](https://developer.microsoft.com/en-us/microsoft-edge/webview2/#download-section) and install it.
-
-The WebView2 runtime is included in Windows 11 by default.
-
-## Linux and macOS
-
-Add the package `desktop_webview_window: ^0.2.3` inside *dependencies* to the *pubspec.yaml* file.
-
-Modify the *main* function to look like the following:
-
-```
-void main(List<String> args) async {
-  WidgetsFlutterBinding.ensureInitialized();
-  if (runWebViewTitleBarWidget(args)) {
-    return;
-  }
-  runApp(const MyApp());
-}
+```shell
+git clone https://github.com/casdoor/casdoor-flutter-example
+cd casdoor-flutter-example
+flutter pub get
 ```
 
-### Web
-On the Web platform an endpoint needs to be created that captures the callback URL and sends it to the application using the JavaScript postMessage() method. In the ./web folder of the project, create an HTML file with the name e.g. callback.html with content:
+| Platform        | Command                                 |
+|-----------------|-----------------------------------------|
+| Web             | `flutter run -d chrome --web-port 9000` |
+| Android, iOS    | `flutter run`                           |
+| Windows         | `flutter run -d windows`                |
+| macOS           | `flutter run -d macos`                  |
+| Linux           | `flutter run -d linux`                  |
 
-```
-<!DOCTYPE html>
-<title>Authentication complete</title>
-<p>Authentication is complete. If this does not happen automatically, please
-close the window.
-<script>
-  if (window.opener == null) {
-    localStorage.setItem('casdoor-auth', window.location.href);
-  } else {
-    window.opener.postMessage({
-      'casdoor-auth': window.location.href
-    }, window.location.origin);
-  };
-  window.close();
-</script>
+Click **Login**. On the demo server, sign in with username `admin` and password `123`.
 
-```
-Redirection URL passed to the authentication service must be the same as the URL on which the application is running (schema, host, port if necessary) and the path must point to created HTML file, /callback.html in this case, like  `callbackUri = "${_config.redirectUri}.html"`. The callbackUrlScheme parameter of the authenticate() method does not take into account, so it is possible to use a schema for native platforms in the code.It should be noted that when obtaining a token, cross domain may occur
+Platform notes, see the [platform setup of the SDK](https://github.com/casdoor/casdoor-flutter-sdk#platform-setup) for the details:
 
-For the Sign in with Apple in web_message response mode, postMessage from https://appleid.apple.com is also captured, and the authorization object is returned as a URL fragment encoded as a query string (for compatibility with other providers).
+- **Web**: the port must be the one of the redirect URI. Casdoor redirects the popup to [web/callback.html](web/callback.html), which sends the URL back to the app.
+- **Android**: `CallbackActivity` in `AndroidManifest.xml` receives `casdoor://callback`.
+- **Linux**: install WebKitGTK, for example `sudo apt install libwebkit2gtk-4.1-dev`.
+- **Windows**: needs the [WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/), preinstalled on Windows 11.
 
-## After running, you will see the following  interfaces:
-|  **Android**   | **iOS**  | **Web** |
-|  ----  | ----  |----  |
-| ![Android](screen-andriod.gif) |![iOS](screen-ios.gif)  |![Web](screen-web.gif) |
+## Resources
+
+- [Casdoor documentation](https://casdoor.ai/docs/overview)
+- [casdoor-flutter-sdk](https://github.com/casdoor/casdoor-flutter-sdk)
+
+## License
+
+[Apache-2.0](LICENSE)

@@ -3,12 +3,12 @@
 <p>Authentication is complete. If this does not happen automatically, please
 close the window.
 <script>
-  if (window.opener == null) {
-    localStorage.setItem('casdoor-auth', window.location.href);
-  } else {
+  if (window.opener) {
     window.opener.postMessage({
       'casdoor-auth': window.location.href
     }, window.location.origin);
-  };
+  } else {
+    localStorage.setItem('casdoor-auth', window.location.href);
+  }
   window.close();
 </script>
